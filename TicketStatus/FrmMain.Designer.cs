@@ -21,10 +21,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmTicketStatus));
             this.lstURL = new System.Windows.Forms.ListBox();
-            this.GrdURLlist = new System.Windows.Forms.DataGridView();
+            this.gdvAllEvents = new System.Windows.Forms.DataGridView();
             this.CntMenuGrd1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolOpenEvent = new System.Windows.Forms.ToolStripMenuItem();
             this.toolDeleteEvent = new System.Windows.Forms.ToolStripMenuItem();
@@ -33,7 +33,7 @@
             this.btnAddUrl = new System.Windows.Forms.Button();
             this.lblUrl = new System.Windows.Forms.Label();
             this.txtURL = new System.Windows.Forms.TextBox();
-            this.GrdEventPending = new System.Windows.Forms.DataGridView();
+            this.gdvEventsTicketsAvailable = new System.Windows.Forms.DataGridView();
             this.CntMenuGrd2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openUrl = new System.Windows.Forms.ToolStripMenuItem();
             this.tooldeleteUrl = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,10 +44,10 @@
             this.shapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
             this.rectangleShape2 = new Microsoft.VisualBasic.PowerPacks.RectangleShape();
             this.rectangleShape1 = new Microsoft.VisualBasic.PowerPacks.RectangleShape();
-            ((System.ComponentModel.ISupportInitialize)(this.GrdURLlist)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gdvAllEvents)).BeginInit();
             this.CntMenuGrd1.SuspendLayout();
             this.MainPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.GrdEventPending)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gdvEventsTicketsAvailable)).BeginInit();
             this.CntMenuGrd2.SuspendLayout();
             this.pnlGrid.SuspendLayout();
             this.SuspendLayout();
@@ -69,38 +69,38 @@
             this.lstURL.TabIndex = 4;
             this.lstURL.TabStop = false;
             // 
-            // GrdURLlist
+            // gdvAllEvents
             // 
-            this.GrdURLlist.AllowUserToAddRows = false;
-            this.GrdURLlist.AllowUserToDeleteRows = false;
-            this.GrdURLlist.AllowUserToOrderColumns = true;
-            this.GrdURLlist.AllowUserToResizeColumns = false;
-            this.GrdURLlist.AllowUserToResizeRows = false;
-            this.GrdURLlist.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.gdvAllEvents.AllowUserToAddRows = false;
+            this.gdvAllEvents.AllowUserToDeleteRows = false;
+            this.gdvAllEvents.AllowUserToOrderColumns = true;
+            this.gdvAllEvents.AllowUserToResizeColumns = false;
+            this.gdvAllEvents.AllowUserToResizeRows = false;
+            this.gdvAllEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.GrdURLlist.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.GrdURLlist.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.GrdURLlist.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.GrdURLlist.Location = new System.Drawing.Point(-1, 27);
-            this.GrdURLlist.MultiSelect = false;
-            this.GrdURLlist.Name = "GrdURLlist";
-            this.GrdURLlist.ReadOnly = true;
-            this.GrdURLlist.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
-            this.GrdURLlist.RowHeadersVisible = false;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Comic Sans MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrdURLlist.RowsDefaultCellStyle = dataGridViewCellStyle4;
-            this.GrdURLlist.RowTemplate.ContextMenuStrip = this.CntMenuGrd1;
-            this.GrdURLlist.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Comic Sans MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrdURLlist.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GrdURLlist.ShowCellErrors = false;
-            this.GrdURLlist.ShowCellToolTips = false;
-            this.GrdURLlist.ShowEditingIcon = false;
-            this.GrdURLlist.ShowRowErrors = false;
-            this.GrdURLlist.Size = new System.Drawing.Size(567, 372);
-            this.GrdURLlist.TabIndex = 8;
-            this.GrdURLlist.TabStop = false;
-            this.GrdURLlist.UseWaitCursor = true;
+            this.gdvAllEvents.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.gdvAllEvents.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.gdvAllEvents.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gdvAllEvents.Location = new System.Drawing.Point(-1, 27);
+            this.gdvAllEvents.MultiSelect = false;
+            this.gdvAllEvents.Name = "gdvAllEvents";
+            this.gdvAllEvents.ReadOnly = true;
+            this.gdvAllEvents.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
+            this.gdvAllEvents.RowHeadersVisible = false;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Comic Sans MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gdvAllEvents.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.gdvAllEvents.RowTemplate.ContextMenuStrip = this.CntMenuGrd1;
+            this.gdvAllEvents.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Comic Sans MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gdvAllEvents.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.gdvAllEvents.ShowCellErrors = false;
+            this.gdvAllEvents.ShowCellToolTips = false;
+            this.gdvAllEvents.ShowEditingIcon = false;
+            this.gdvAllEvents.ShowRowErrors = false;
+            this.gdvAllEvents.Size = new System.Drawing.Size(567, 372);
+            this.gdvAllEvents.TabIndex = 8;
+            this.gdvAllEvents.TabStop = false;
+            this.gdvAllEvents.UseWaitCursor = true;
             // 
             // CntMenuGrd1
             // 
@@ -178,29 +178,29 @@
             this.txtURL.TabIndex = 12;
             this.txtURL.Leave += new System.EventHandler(this.txtURL_Leave);
             // 
-            // GrdEventPending
+            // gdvEventsTicketsAvailable
             // 
-            this.GrdEventPending.AllowUserToAddRows = false;
-            this.GrdEventPending.AllowUserToDeleteRows = false;
-            this.GrdEventPending.AllowUserToOrderColumns = true;
-            this.GrdEventPending.AllowUserToResizeColumns = false;
-            this.GrdEventPending.AllowUserToResizeRows = false;
-            this.GrdEventPending.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.gdvEventsTicketsAvailable.AllowUserToAddRows = false;
+            this.gdvEventsTicketsAvailable.AllowUserToDeleteRows = false;
+            this.gdvEventsTicketsAvailable.AllowUserToOrderColumns = true;
+            this.gdvEventsTicketsAvailable.AllowUserToResizeColumns = false;
+            this.gdvEventsTicketsAvailable.AllowUserToResizeRows = false;
+            this.gdvEventsTicketsAvailable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.GrdEventPending.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.GrdEventPending.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.GrdEventPending.Location = new System.Drawing.Point(567, 27);
-            this.GrdEventPending.MultiSelect = false;
-            this.GrdEventPending.Name = "GrdEventPending";
-            this.GrdEventPending.ReadOnly = true;
-            this.GrdEventPending.RowHeadersVisible = false;
-            this.GrdEventPending.RowTemplate.ContextMenuStrip = this.CntMenuGrd2;
-            this.GrdEventPending.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Comic Sans MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrdEventPending.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GrdEventPending.Size = new System.Drawing.Size(568, 372);
-            this.GrdEventPending.TabIndex = 13;
-            this.GrdEventPending.TabStop = false;
+            this.gdvEventsTicketsAvailable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.gdvEventsTicketsAvailable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gdvEventsTicketsAvailable.Location = new System.Drawing.Point(567, 27);
+            this.gdvEventsTicketsAvailable.MultiSelect = false;
+            this.gdvEventsTicketsAvailable.Name = "gdvEventsTicketsAvailable";
+            this.gdvEventsTicketsAvailable.ReadOnly = true;
+            this.gdvEventsTicketsAvailable.RowHeadersVisible = false;
+            this.gdvEventsTicketsAvailable.RowTemplate.ContextMenuStrip = this.CntMenuGrd2;
+            this.gdvEventsTicketsAvailable.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Comic Sans MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gdvEventsTicketsAvailable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.gdvEventsTicketsAvailable.Size = new System.Drawing.Size(568, 372);
+            this.gdvEventsTicketsAvailable.TabIndex = 13;
+            this.gdvEventsTicketsAvailable.TabStop = false;
             // 
             // CntMenuGrd2
             // 
@@ -244,8 +244,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlGrid.Controls.Add(this.lblGrid2Title);
             this.pnlGrid.Controls.Add(this.lblGrid1Title);
-            this.pnlGrid.Controls.Add(this.GrdURLlist);
-            this.pnlGrid.Controls.Add(this.GrdEventPending);
+            this.pnlGrid.Controls.Add(this.gdvAllEvents);
+            this.pnlGrid.Controls.Add(this.gdvEventsTicketsAvailable);
             this.pnlGrid.Controls.Add(this.shapeContainer1);
             this.pnlGrid.Location = new System.Drawing.Point(2, 30);
             this.pnlGrid.Name = "pnlGrid";
@@ -260,9 +260,9 @@
             this.lblGrid2Title.Font = new System.Drawing.Font("Comic Sans MS", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblGrid2Title.Location = new System.Drawing.Point(799, 5);
             this.lblGrid2Title.Name = "lblGrid2Title";
-            this.lblGrid2Title.Size = new System.Drawing.Size(104, 19);
+            this.lblGrid2Title.Size = new System.Drawing.Size(122, 19);
             this.lblGrid2Title.TabIndex = 18;
-            this.lblGrid2Title.Text = "Ticket on Sale";
+            this.lblGrid2Title.Text = "Tickets Available";
             // 
             // lblGrid1Title
             // 
@@ -321,11 +321,11 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Ticket Status";
             this.Activated += new System.EventHandler(this.FrmTicketStatus_Activated);
-            ((System.ComponentModel.ISupportInitialize)(this.GrdURLlist)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gdvAllEvents)).EndInit();
             this.CntMenuGrd1.ResumeLayout(false);
             this.MainPanel.ResumeLayout(false);
             this.MainPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.GrdEventPending)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gdvEventsTicketsAvailable)).EndInit();
             this.CntMenuGrd2.ResumeLayout(false);
             this.pnlGrid.ResumeLayout(false);
             this.pnlGrid.PerformLayout();
@@ -336,13 +336,13 @@
         #endregion
 
         private System.Windows.Forms.ListBox lstURL;
-        private System.Windows.Forms.DataGridView GrdURLlist;
+        private System.Windows.Forms.DataGridView gdvAllEvents;
         private System.Windows.Forms.Panel MainPanel;
         private System.Windows.Forms.CheckBox ChkProxy;
         private System.Windows.Forms.Button btnAddUrl;
         private System.Windows.Forms.Label lblUrl;
         private System.Windows.Forms.TextBox txtURL;
-        private System.Windows.Forms.DataGridView GrdEventPending;
+        private System.Windows.Forms.DataGridView gdvEventsTicketsAvailable;
         private System.Windows.Forms.ContextMenuStrip CntMenuGrd1;
         private System.Windows.Forms.ToolStripMenuItem toolOpenEvent;
         private System.Windows.Forms.ToolStripMenuItem toolDeleteEvent;

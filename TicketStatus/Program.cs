@@ -6,6 +6,9 @@ using System.Web;
 using System.Net;
 using System.IO;
 using HtmlAgilityPack;
+using Newtonsoft.Json.Linq;
+using System.Xml;
+using TicketStatus.Common;
 
 namespace TicketStatus
 {
@@ -34,7 +37,7 @@ namespace TicketStatus
         }
 
     }
-    public class SetUrl
+    public class Event
     {
         private string _URL = "";
         private string _EventName = "";
@@ -48,7 +51,7 @@ namespace TicketStatus
         private WebProxy _URLProxy;
         private Boolean _IsBusy;
 
-        public string URL { get { return _URL; } set { _URL = value; }}
+        public string URL { get { return _URL; } set { _URL = value; } }
         public Boolean UseProxy { get { return _UseProxy; } set { _UseProxy = value; } }
         public Boolean IsError { get { return _IsError; } set { _IsError = value; } }
         public Boolean IsBusy { get { return _IsBusy; } set { _IsBusy = value; } }
@@ -60,7 +63,7 @@ namespace TicketStatus
         public string EventOther { get { return _EventOther; } set { _EventOther = value; } }
         public WebProxy URLProxy { get { return _URLProxy; } set { _URLProxy = value; } }
 
-        public SetUrl(string cURL, Boolean lUseProxy)
+        public Event(string cURL, Boolean lUseProxy)
         {
             _URL = cURL;
             _IsBusy = true;
@@ -125,11 +128,11 @@ namespace TicketStatus
                         {
                             cCheckURL = doc.DocumentNode.SelectSingleNode("//a[@class='primary-cta btn-new btn-size-small orange btn-color-orange white btn-text-color-white ']").GetAttributeValue("href", "").ToString().Replace("https://tickets.axs.com/eventShopperV3.html?", "https://mobile.eventshopper.com/mobilewroom/?");
                         }
-                       
+
                         //string str = wc.UploadString("https://mobile.eventshopper.com/mobileshopper/ajax/availWSS.json", "8d89a50d-40dd-42c8-9743-5ed68413fbba");
                         //string str1 = wc.UploadString("https://mobile.eventshopper.com/mobileshopper/ajax/availWSS.json", "0d727ba1-5771-41f7-8395-d9deedabe086");
 
-                                                
+
                         wc.DownloadStringCompleted += (sender, e) =>
                         {
                             page = e.Result;
@@ -137,7 +140,7 @@ namespace TicketStatus
                         wc.DownloadString(cCheckURL);
                         //page = wc.DownloadString(cCheckURL);
                         doc.LoadHtml(page);
-                        
+
 
                         if (page.ToLower().Contains("select quantity"))
                         {
@@ -156,7 +159,7 @@ namespace TicketStatus
                         //}
                         //catch { }
 
-                        
+
                         //if (cStatus.ToLower().Contains("select quantity"))
                         //{
                         //    _EventStatus = "select tickets";
@@ -168,8 +171,8 @@ namespace TicketStatus
                     }
                 }
                 catch
-                {                 }
-                
+                { }
+
                 for (int i = 0; i < 4; i++)
                 {
                     try
@@ -210,14 +213,14 @@ namespace TicketStatus
             _IsBusy = false;
         }
 
-        public void CheckStatus(string cURL)
+        public void CheckStatus(string eventUrl)
         {
             if (_EventStatus != "Expired" && _EventStatus != "Error")
             {
                 _IsBusy = true;
                 WebClient wc = new WebClient();
                 wc.Proxy = _UseProxy ? _URLProxy : null;
-                var page = wc.DownloadString(cURL);
+                var page = wc.DownloadString(eventUrl);
                 HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(page);
                 string _NewEventStatus = "";
@@ -240,70 +243,23 @@ namespace TicketStatus
                         Uri myUri = new Uri(cCheckURL);
                         string wr = HttpUtility.ParseQueryString(myUri.Query).Get("wr");
 
-                        //RISKY CODE
+                        bool noAvailable = AreTicketsAvailable(cCheckURL, wr);
 
-                        string response = wc.DownloadString(cCheckURL);
-
-                        
-
-                        //Get lot id from above response. Lot id is defined as a variable
-
-                        //using lotid and wr... call below post request
-                        //https://tickets.axs.com/xmlrpc/?methodName=getPhase&lotId=<lotid>&wr=<wr>
-                        //COntentytpe: application/x-www-form-urlencoded; charset=UTF-8
-                        //requestbody
-//                        <?xml version="1.0"?>
-//<methodCall>
-//<methodName>getPhase</methodName>
-//<params>
-//<param><value><string>07a73b4d-6e15-4926-8f53-abe29a7834ea</string></value></param><param><value><string>NoLotId</string></value></param></params>
-//</methodCall>
-
-
-
-                        //you will get hash and ts in xml response. you have to use this lot, hash and ts to get the two cookies
-
-                        //the url will be add below things to cCheckURL&lot=<lotid>&hash=<hash>&ts=<ts>
-
-                        //after you hit above url, you will get cookies  srv_id and mobileshopper.session.id
-                        //use these in below post to get seta availability
-
-                        
-                        string mobileUrl = "https://mobile.eventshopper.com/mobileshopper/ajax/availWSS.json";
-
-                        wc.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.155 Safari/537.36");
-                        wc.Headers.Add("Content-Type", "text/plain;charset=UTF-8");
-                        wc.Headers.Add("Cookie", "srv_id=d50788c37340c8208f74578ddea8f51d; mobileshopper.session.id=a45fa92e59c744dd992f124df46ac1b1");
-
-                        string jsonResponse = wc.UploadString(mobileUrl, string.Format("[\"{0}\"]", wr));
-
-                        //END RISKY CODE. Here you will get the response which will tell whether seats are available or not and what seats are available
-
-
-                        if (page.ToLower().Contains("select quantity"))
+                        if (noAvailable)
                         {
-                            _EventStatus = "select tickets";
+                            _EventStatus = "Not Available";
                         }
                         else
                         {
-                            _EventStatus = "Sold out";
-                        } 
-
-                        //page = wc.DownloadString(cCheckURL);
-                        //if (page.ToLower().Contains("select quantity"))
-                        //{
-                        //    _EventStatus = "select tickets";
-                        //}
-                        //else
-                        //{
-                        //    _EventStatus = "Sold out";
-                        //}
+                            _EventStatus = "select tickets";
+                        }
                     }
                     else
                     {
                         _EventStatus = _NewEventStatus;
                     }
-                } catch 
+                }
+                catch
                 {
                     _EventStatus = _NewEventStatus;
                 }
@@ -311,19 +267,79 @@ namespace TicketStatus
                 if (_EventStatus != _EventLastStatus)
                 {
                     _EventLastStatus = _EventStatus;
-                    //this.AlertEvenet();
                 }
                 _IsBusy = false;
             }
-      }
+        }
+
+        private string GetXmlNodeValue(string inputXml, string memberName)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(inputXml);
+
+            XmlNodeList members = xmlDoc.SelectNodes("methodResponse/params/param/value/struct/member");
+
+            foreach (XmlNode member in members)
+            {
+                if (member.SelectSingleNode("name").InnerText == memberName)
+                {
+                    return member.SelectSingleNode("value/string").InnerText;
+                }
+            }
+
+            return null;
+        }
+
+        public bool isEmpty(string json)
+        {
+            var foodJsonObj = JObject.Parse(json);
+
+            bool isEmpty = true;
+
+            foreach (var prop in foodJsonObj["eventavail"])
+            {
+                int length = (prop.First as JArray).Children().Count();
+
+                if (length > 0)
+                {
+                    isEmpty = false;
+                    break;
+                }
+            }
+
+            return isEmpty;
+        }
+
+        private bool AreTicketsAvailable(string url, string wr)
+        {
+            HttpSimulator simulator = new HttpSimulator();
+            string respose = simulator.Get(url);
+
+            string lot = simulator.GetData(respose, "var lotId = \"", "\";", System.Text.RegularExpressions.RegexOptions.None);
+
+            string xmlData = string.Format("<?xml version=\"1.0\"?><methodCall><methodName>getPhase</methodName><params><param><value><string>{0}</string></value></param><param><value><string>{1}</string></value></param></params></methodCall>", wr, lot);
+
+            string xmlResponse = simulator.PostXml(string.Format("https://tickets.axs.com/xmlrpc/?methodName=getPhase&lotId={0}&wr={1}", lot, wr), xmlData);
+
+            string hash = GetXmlNodeValue(xmlResponse.Replace("<?xml version=\"1.0\"?>", string.Empty), "hash");
+            string ts = GetXmlNodeValue(xmlResponse.Replace("<?xml version=\"1.0\"?>", string.Empty), "hashts");
+
+            string newUrl = string.Format("{0}&lot={1}&hash={2}&ts={3}", url.Replace("mobilewroom", "mobileshopper"), lot, hash, ts);
+
+            simulator.Get(newUrl);
+
+            string jsonResponse = simulator.PostPlainText("https://mobile.eventshopper.com/mobileshopper/ajax/availWSS.json", string.Format("[\"{0}\"]", wr));
+
+            return isEmpty(jsonResponse);
+        }
 
         public void AlertEvenet()
         {
-            MessageBox.Show("Event Name : "+ _EventName.ToString());
+            MessageBox.Show("Event Name : " + _EventName.ToString());
         }
     }
 
-   public class Proxy
+    public class Proxy
     {
         public static WebProxy GetProxy()
         {
@@ -341,12 +357,12 @@ namespace TicketStatus
                     listStrLineElements = lines[nLine].Split(',').ToList();
                     lcHost = listStrLineElements[0].Trim();
                     lnPort = int.Parse(listStrLineElements[1].Trim());
-                 }
+                }
             }
             return lcHost.ToString() == "" || lnPort == 0 ? null : new WebProxy(lcHost, lnPort);
         }
     }
- 
-   
+
+
 
 }

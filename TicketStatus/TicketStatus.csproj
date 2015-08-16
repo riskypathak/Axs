@@ -44,6 +44,10 @@
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.VisualBasic.PowerPacks, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -103,6 +107,12 @@
     <Content Include="Resources\CheckTicketStatusIconFINAL.ico" />
     <Content Include="Resources\CheckTicketStatusIconFINAL.jpg" />
     <None Include="Resources\images.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TicketStatus.Common\TicketStatus.Common.csproj">
+      <Project>{7467a795-9eab-4171-aef8-e873845b5040}</Project>
+      <Name>TicketStatus.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
