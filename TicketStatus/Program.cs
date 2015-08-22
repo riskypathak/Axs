@@ -238,10 +238,12 @@ namespace TicketStatus
                     if (_NewEventStatus.ToLower() == "select tickets")
                     {
                         string cCheckURL = "";
-                        cCheckURL = doc.DocumentNode.SelectSingleNode("//*[@id='event-details-content']/div/div[2]/section[1]/div/div[2]/div[2]/div[2]/a").GetAttributeValue("href", "").ToString().Replace("https://tickets.axs.com/eventShopperV3.html?", "https://mobile.eventshopper.com/mobilewroom/?");
+                        cCheckURL = doc.DocumentNode.SelectSingleNode("//a[@class='primary-cta btn-new btn-size-small orange btn-color-orange white btn-text-color-white ']").GetAttributeValue("href", "").ToString();
 
                         Uri myUri = new Uri(cCheckURL);
                         string wr = HttpUtility.ParseQueryString(myUri.Query).Get("wr");
+
+                        cCheckURL = "https://mobile.eventshopper.com/mobilewroom" + myUri.Query;
 
                         bool noAvailable = AreTicketsAvailable(cCheckURL, wr);
 
@@ -292,19 +294,26 @@ namespace TicketStatus
 
         public bool isEmpty(string json)
         {
-            var foodJsonObj = JObject.Parse(json);
-
             bool isEmpty = true;
 
-            foreach (var prop in foodJsonObj["eventavail"])
+            try
             {
-                int length = (prop.First as JArray).Children().Count();
+                var goodJsonObj = JObject.Parse(json);
 
-                if (length > 0)
+                foreach (var prop in goodJsonObj["eventavail"])
                 {
-                    isEmpty = false;
-                    break;
+                    int length = (prop.First as JArray).Children().Count();
+
+                    if (length > 0)
+                    {
+                        isEmpty = false;
+                        break;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+
             }
 
             return isEmpty;
