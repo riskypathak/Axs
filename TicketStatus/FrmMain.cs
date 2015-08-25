@@ -61,38 +61,6 @@ namespace TicketStatus
             txtURL.Focus();
         }
 
-        //private void DisplayUrl(string strUrl)
-        //{
-        //    if (strUrl.Trim() != "" && strUrl.ToLower().Contains("axs.com") && Uri.IsWellFormedUriString(strUrl.Trim(), UriKind.RelativeOrAbsolute))
-        //    {
-        //        if (webURLDisplay.Url == null || webURLDisplay.Url.ToString().ToLower() != strUrl.ToString().ToLower())
-        //        {
-        //            WaitImage.Visible = true;
-        //            webURLDisplay.ScriptErrorsSuppressed = true;
-        //            webURLDisplay.Navigate(strUrl);
-        //            webURLDisplay.DocumentCompleted += webURLDisplay_DocumentCompleted;
-        //        }
-        //    }
-        //}
-
-        //private void webURLDisplay_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        //{
-        //    webURLDisplay.DocumentCompleted -= webURLDisplay_DocumentCompleted;
-        //    try 
-        //    {
-        //        webURLDisplay.Document.Body.InnerHtml = webURLDisplay.Document.GetElementById("layout-body-block").OuterHtml;
-        //    }
-        //    catch
-        //    {
-        //        try
-        //        {
-        //            webURLDisplay.Document.Body.InnerHtml = webURLDisplay.Document.GetElementById("page-relative-block").OuterHtml;
-        //        }
-        //        catch { }
-        //    }
-        //    WaitImage.Visible = false;
-        //}
-
         private void FillGrid()
         {
             gdvAllEvents.Rows.Clear();
@@ -115,7 +83,7 @@ namespace TicketStatus
             gdvAllEvents.Columns[4].DisplayIndex = 3;
 
             gdvEventsTicketsAvailable.Rows.Clear();
-            gdvEventsTicketsAvailable.ColumnCount = 5;
+            gdvEventsTicketsAvailable.ColumnCount = 6;
             gdvEventsTicketsAvailable.Columns[0].Name = "Event Name";
             gdvEventsTicketsAvailable.Columns[0].ReadOnly = true;
             gdvEventsTicketsAvailable.Columns[0].DisplayIndex = 0;
@@ -138,6 +106,13 @@ namespace TicketStatus
             gdvEventsTicketsAvailable.Columns[4].ReadOnly = true;
             gdvEventsTicketsAvailable.Columns[4].DisplayIndex = 3;
             gdvEventsTicketsAvailable.Columns[4].Visible = false;
+
+            gdvEventsTicketsAvailable.Columns[5].Name = "Seats";
+            gdvEventsTicketsAvailable.Columns[5].ReadOnly = true;
+            gdvEventsTicketsAvailable.Columns[5].DisplayIndex = 5;
+            gdvEventsTicketsAvailable.Columns[5].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
+            gdvEventsTicketsAvailable.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
             gdvAllEvents.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(GrdURLlist_RowPrePaint);
         }
@@ -203,7 +178,7 @@ namespace TicketStatus
                     }
                     if (rowIndex == -1)
                     {
-                        gdvEventsTicketsAvailable.Rows.Add(ListUrl.EventName, ListUrl.EventTime, ListUrl.EventStatus, ListUrl.URL, ListUrl.EventOnSale);
+                        gdvEventsTicketsAvailable.Rows.Add(ListUrl.EventName, ListUrl.EventTime, ListUrl.EventStatus, ListUrl.URL, ListUrl.EventOnSale, ListUrl.SeatStatus);
                     }
                     else
                     {

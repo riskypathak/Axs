@@ -27,7 +27,7 @@ namespace TicketsStatus.Test
 
             string xmlData = string.Format("<?xml version=\"1.0\"?><methodCall><methodName>getPhase</methodName><params><param><value><string>{0}</string></value></param><param><value><string>{1}</string></value></param></params></methodCall>", wr, lot);
 
-            string xmlResponse = simulator.PostXml(string.Format("https://tickets.axs.com/xmlrpc/?methodName=getPhase&lotId={0}&wr={1}", lot, wr), xmlData);
+            string xmlResponse = simulator.PostFormUrlEncoded(string.Format("https://tickets.axs.com/xmlrpc/?methodName=getPhase&lotId={0}&wr={1}", lot, wr), xmlData);
 
             string hash = GetXmlNodeValue(xmlResponse.Replace("<?xml version=\"1.0\"?>", string.Empty), "hash");
             string ts = GetXmlNodeValue(xmlResponse.Replace("<?xml version=\"1.0\"?>", string.Empty), "hashts");
@@ -63,8 +63,6 @@ namespace TicketsStatus.Test
                 }
             }
         }
-
-
 
         private string GetXmlNodeValue(string inputXml, string memberName)
         {

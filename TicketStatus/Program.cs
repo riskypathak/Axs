@@ -61,6 +61,8 @@ namespace TicketStatus
         public string EventLastStatus { get { return _EventLastStatus; } set { _EventLastStatus = value; } }
         public string EventOnSale { get { return _EventOnSale; } set { _EventOnSale = value; } }
         public string EventOther { get { return _EventOther; } set { _EventOther = value; } }
+
+        public string SeatStatus { get; set; }
         public WebProxy URLProxy { get { return _URLProxy; } set { _URLProxy = value; } }
 
         public Event(string cURL, Boolean lUseProxy)
@@ -111,7 +113,7 @@ namespace TicketStatus
                     }
                     catch
                     {
-                        _EventStatus = "Expired";
+                        _EventStatus = "Not Available";
                     }
                 }
 
@@ -144,30 +146,12 @@ namespace TicketStatus
 
                         if (page.ToLower().Contains("select quantity"))
                         {
-                            _EventStatus = "select tickets";
+                            _EventStatus = "Can be available";
                         }
                         else
                         {
-                            _EventStatus = "Sold out";
+                            _EventStatus = "Unknown";
                         }
-
-                        //string cStatus = "";
-                        //try
-                        //{
-                        //    cStatus = doc.DocumentNode.SelectSingleNode("//*[@id='qtyLabel']").InnerText.Replace("/n", "").Trim();
-
-                        //}
-                        //catch { }
-
-
-                        //if (cStatus.ToLower().Contains("select quantity"))
-                        //{
-                        //    _EventStatus = "select tickets";
-                        //}
-                        //else
-                        //{
-                        //    _EventStatus = "Sold out";
-                        //}
                     }
                 }
                 catch
@@ -245,7 +229,8 @@ namespace TicketStatus
 
                         cCheckURL = "https://mobile.eventshopper.com/mobilewroom" + myUri.Query;
 
-                        bool noAvailable = AreTicketsAvailable(cCheckURL, wr);
+                        Dictionary<string, string> seatStatus = new Dictionary<string, string>();
+                        bool noAvailable = AreTicketsAvailable(cCheckURL, wr, out seatStatus);
 
                         if (noAvailable)
                         {
@@ -254,6 +239,12 @@ namespace TicketStatus
                         else
                         {
                             _EventStatus = "select tickets";
+                            this.SeatStatus = string.Empty;
+
+                            foreach (KeyValuePair<string, string> kv in seatStatus)
+                            {
+                                this.SeatStatus += kv.Key + ": " + kv.Value + "\n";
+                            }
                         }
                     }
                     else
@@ -319,27 +310,83 @@ namespace TicketStatus
             return isEmpty;
         }
 
-        private bool AreTicketsAvailable(string url, string wr)
+        public Dictionary<string, string> GetSeatStatus(HttpSimulator simulator, string json, string mobileShopperResponse, string wr)
+        {
+            Dictionary<string, string> seatAvailability = new Dictionary<string, string>();
+
+            string eventTypeCode = simulator.GetData(mobileShopperResponse, "eventTypeCode=\"", "\" eventCode=\"", System.Text.RegularExpressions.RegexOptions.None);
+            string eventCode = simulator.GetData(mobileShopperResponse, "eventCode=\"", "\" eventDateTimeTimestamp=\"", System.Text.RegularExpressions.RegexOptions.None);
+
+            string postSeatData = string.Format("wr={0}&eventTypeCode={1}&eventCode={2}&pack=&action=search", wr, eventTypeCode, eventCode);
+            string seatResponse = simulator.PostFormUrlEncoded("https://mobile.eventshopper.com/mobileshopper/index.html", postSeatData);
+
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(seatResponse);
+
+            var goodJsonObj = JObject.Parse(json);
+
+
+            foreach (var htmlNode in doc.DocumentNode.SelectNodes("//span[@class='price-level-range']"))
+            {
+                if (htmlNode.Attributes["price-level-code"] != null)
+                {
+                    string price = htmlNode.SelectSingleNode("strong").InnerText;
+                    seatAvailability.Add(price, "NA");
+                }
+            }
+
+            int priceLevel = 0;
+            foreach (JArray prop in goodJsonObj["eventavail"][eventCode])
+            {
+                var nthKey = seatAvailability.Select((Val, Index) => new { Val, Index })
+            .Single(viPair => viPair.Index == priceLevel)
+            .Val
+            .Key;
+
+                seatAvailability[nthKey] = Convert.ToString(prop[1]);
+
+                priceLevel++;
+            }
+
+            return seatAvailability;
+        }
+
+        private bool AreTicketsAvailable(string url, string wr, out Dictionary<string, string> seatStatus)
         {
             HttpSimulator simulator = new HttpSimulator();
             string respose = simulator.Get(url);
+            bool isBlank = false;
 
             string lot = simulator.GetData(respose, "var lotId = \"", "\";", System.Text.RegularExpressions.RegexOptions.None);
 
             string xmlData = string.Format("<?xml version=\"1.0\"?><methodCall><methodName>getPhase</methodName><params><param><value><string>{0}</string></value></param><param><value><string>{1}</string></value></param></params></methodCall>", wr, lot);
 
-            string xmlResponse = simulator.PostXml(string.Format("https://tickets.axs.com/xmlrpc/?methodName=getPhase&lotId={0}&wr={1}", lot, wr), xmlData);
+            string xmlResponse = simulator.PostFormUrlEncoded(string.Format("https://tickets.axs.com/xmlrpc/?methodName=getPhase&lotId={0}&wr={1}", lot, wr), xmlData);
 
             string hash = GetXmlNodeValue(xmlResponse.Replace("<?xml version=\"1.0\"?>", string.Empty), "hash");
             string ts = GetXmlNodeValue(xmlResponse.Replace("<?xml version=\"1.0\"?>", string.Empty), "hashts");
 
             string newUrl = string.Format("{0}&lot={1}&hash={2}&ts={3}", url.Replace("mobilewroom", "mobileshopper"), lot, hash, ts);
 
-            simulator.Get(newUrl);
+            string mobileShopperResponse = simulator.Get(newUrl);
+
 
             string jsonResponse = simulator.PostPlainText("https://mobile.eventshopper.com/mobileshopper/ajax/availWSS.json", string.Format("[\"{0}\"]", wr));
 
-            return isEmpty(jsonResponse);
+            isBlank = isEmpty(jsonResponse);
+
+
+
+            if (!isBlank)
+            {
+                seatStatus = GetSeatStatus(simulator, jsonResponse, mobileShopperResponse, wr);
+            }
+            else
+            {
+                seatStatus = null;
+            }
+
+            return isBlank;
         }
 
         public void AlertEvenet()

@@ -26,7 +26,7 @@ namespace TicketStatus.Common
             return webclient.UploadString(url, data);
         }
 
-        public string PostXml(string url, string data)
+        public string PostFormUrlEncoded(string url, string data)
         {
             webclient.Headers.Add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
             webclient.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.155 Safari/537.36");
